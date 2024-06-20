@@ -18,7 +18,9 @@
     "prettier:fix": "prettier --write --no-error-on-unmatched-pattern --ignore-unknown ./**/*",
     "test": "jest --config=jest.config.js",
     "test:coverage": "jest --config=jest.config.js --coverage",
-    "server:prod": "npm run build && node -r tsconfig-paths/register ./dist/src/index.js"
+    "server:prod": "npm run build && node -r tsconfig-paths/register ./dist/src/index.js",
+    "server:prod:docker": "node -r tsconfig-paths/register ./dist/src/index.js"
+
   },
   "keywords": [],
   "author": "Ovitec",
