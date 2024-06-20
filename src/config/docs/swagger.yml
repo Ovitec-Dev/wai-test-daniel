@@ -1,0 +1,210 @@
+openapi: 3.0.0
+info:
+  version: '1.1.0'
+  title: Incident Report API
+  description: API for managing incident reports
+  termsOfService: 'http://swagger.io/terms/'
+  contact:
+    name: Jesus Oviedo
+    email: oviedossj3@gmail.com
+  license:
+    name: ISC
+servers:
+  - url: https://api.example.com/v1
+    description: Default
+
+paths:
+  /api/new-case:
+    post:
+      tags:
+        - Incident Report
+      summary: Create a new incident report
+      description: Create a new incident report in the system.
+      operationId: createIncidentReport
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IncidentReportData'
+      responses:
+        '201':
+          description: Incident report created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/SuccessResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/update-case/{id}:
+    patch:
+      tags:
+        - Incident Report
+      summary: Update an existing incident report
+      description: Update the details of an existing incident report by ID.
+      operationId: updateIncidentReport
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IncidentReportData'
+      responses:
+        '200':
+          description: Incident report updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/SuccessResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/search:
+    get:
+      tags:
+        - Incident Report
+      summary: Search incident reports
+      description: Search for incident reports based on query parameters.
+      operationId: searchIncidentReports
+      parameters:
+        - $ref: '#/components/parameters/Query'
+      responses:
+        '200':
+          description: Incident reports retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/SuccessResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  schemas:
+    IncidentReportData:
+      type: object
+      properties:
+        incidentType:
+          type: integer
+          example: 1
+        incidentSubtype:
+          type: string
+          example: 'Subtype 1'
+        locationIncident:
+          type: string
+          example: 'Location 1'
+        latitude:
+          type: string
+          example: '40.7128'
+        longitude:
+          type: string
+          example: '-74.0060'
+        description:
+          type: string
+          example: 'Description of the incident'
+        nivelRiesgo:
+          type: string
+          example: 'High'
+        localidad:
+          type: string
+          example: 'Localidad 1'
+        barrio:
+          type: string
+          example: 'Barrio 1'
+        calle:
+          type: string
+          example: 'Calle 1'
+        altura:
+          type: string
+          example: '100'
+        informacionAdicional:
+          type: string
+          example: 'Additional information'
+
+    StandardResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: object
+          additionalProperties: true
+
+    ErrorResponse:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+                example: 'general.BAD_REQUEST.invalid_case_id'
+              code:
+                type: string
+                example: 'INVALID_CASE_ID'
+              message:
+                type: string
+                example: 'The provided case ID is invalid.'
+        status:
+          type: number
+          example: 400
+
+  responses:
+    SuccessResponse:
+      description: Successful operation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/StandardResponse'
+    Unauthorized:
+      description: Access token is missing or is invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        example: '123'
+    Query:
+      name: query
+      in: query
+      description: Query parameters
+      schema:
+        type: string
