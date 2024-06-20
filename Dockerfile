@@ -57,4 +57,4 @@ WORKDIR /usr/src/app/dist
 ENTRYPOINT ["tini", "--"]
 
 # Set command to run the server
-CMD ["npm", "run", "server:prod"]
+CMD ["npm", "run", "server:prod:docker"]
